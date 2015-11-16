@@ -1,0 +1,20 @@
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'polls:vote' question.id %}" method="post">
+{% csrf_token %}
+
+enter email:  
+<input id="email" type="text" name="email" value="asaelcorem@gmail.com">
+<br><br>
+enter password:  
+<input id="password" type="password" name="password" value="asaf0587">
+<br><br>
+<input type="submit" value="Vote" />
+</form>
+
+
+<a target="_blank" 
+    class="btn btn-info pull-right" 
+    href="{% url 'polls:start_scan' question.id %}">
+    Check It Out
+</a>

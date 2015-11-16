@@ -1,0 +1,19 @@
+aaaaaaaaaaa
+<h1>{{ users.user_mail }}</h1>
+
+<form action="{% url 'polls:saving' users.id %}" method="post">
+{% csrf_token %}
+
+{% for group in users.groups_set.all %}
+    <input type="checkbox" name="group_to_mark" id="group{{ forloop.counter }}" value="{{ group.id }}" />
+    <label for="group{{ forloop.counter }}">{{ group.group_name }}</label><br />
+{% endfor %}
+
+<br><br>
+enter fucking keyword:  
+<input id="keyword" type="text" name="keyword">
+
+<input type="submit" value="saving" />
+
+</form>
+
