@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.views import generic
  
 from .models import Choice, Question , Users , Groups
-from mysite import phone_from_facebook
+from myFirstExtension import phone_from_facebook
 import threading
 from lib2to3.fixer_util import is_import
 import time
