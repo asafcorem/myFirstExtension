@@ -51,4 +51,4 @@ class posts(models.Model):
 	keyword = models.CharField(max_length=200)
 	post_text = models.TextField()
 	link =  models.CharField(max_length=500)
-	pub_date = models.DateTimeField(default = datetime.datetime.now())
+	pub_date = models.IntegerField()

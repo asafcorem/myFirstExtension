@@ -8,6 +8,7 @@ from myFirstExtension import phone_from_facebook
 import threading
 from lib2to3.fixer_util import is_import
 import time
+from polls.models import posts
 
 
 class IndexView(generic.ListView):
@@ -71,18 +72,19 @@ def scan_thread():
         print all_users
         print len(all_users)
         threads = []
-        i=0
+        i = 0
         for user_details in all_users:
-            if i>0:
-                continue
-            t = threading.Thread(target=look_for_new_posts(user_details))
-            threads.append(t)
-            t.start()
-            i = i+1
+            if i==0:
+                t = threading.Thread(target=look_for_new_posts(user_details))
+                threads.append(t)
+                t.start()
+            i = i + 1
+        
         print 'Worker'
-        time.sleep(5)
+        time.sleep(600000)
 
 def start_scan(request, question_id):
+    posts.objects.all().delete()
     t = threading.Thread(target=scan_thread)
     t.start()
 
