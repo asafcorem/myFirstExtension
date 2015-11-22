@@ -44,11 +44,13 @@ class Groups(models.Model):
 # 	def __unicode__(self):		   
 # 		return self.choice_text
 
-
-class posts(models.Model):
+class Posts(models.Model):
 	user_id = models.IntegerField(default=0)
 	group_id = models.IntegerField(default=0)
 	keyword = models.CharField(max_length=200)
 	post_text = models.TextField()
 	link =  models.CharField(max_length=500)
 	pub_date = models.IntegerField()
+	
+class Scans(models.Model):
+	time_of_the_scan = models.IntegerField()

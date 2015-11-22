@@ -4,8 +4,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
-from polls.models import Choice, Question , Users , Groups ,posts
-from myFirstExtension.utils import utils
+from polls.models import Choice, Question , Users , Groups ,Posts
+from myFirstExtension import utils
 import unittest, time, re
 import urllib2
         
@@ -15,11 +15,11 @@ class facebook_phone:
 
     def __init__(self , email , password):
         
-        self.patterns = utils.patterns_dic
+        self.patterns = utils.utils.patterns_dic
         self.user_details = {"email": email , "password": password}        
         self.verificationErrors = []
         self.accept_next_alert = True
-        self.driver = webdriver.Chrome()
+        self.driver = webdriver.Chrome("C:\Python27\selenium\webdriver\chromedriver")
     
     
     def start_surfing(self):
@@ -45,12 +45,11 @@ class facebook_phone:
             
     def collect_groups(self):
         groups_data = []
-        
         self.driver.get(self.patterns["all_my_group_url"])
         groups_html = self.driver.page_source.encode('utf-8')
         
         list_of_groups_links = re.findall(self.patterns["group_pattern_for_groups_links"], groups_html)
-        fixed_list_of_groups_links = self.fix_groups_links(list_of_groups_links)
+        fixed_list_of_groups_links = utils.fix_groups_links(list_of_groups_links)
         list_of_groups_names = re.findall(self.patterns["pattern_for_extracting_all_groups_names"], groups_html)
         
         for i in range(len(list_of_groups_names)):
@@ -67,7 +66,7 @@ class facebook_phone:
         for group in list_of_groups:
                 self.driver.get(self.patterns["group_pattern_url"] + group.group_link)
                 page_html = self.driver.page_source.encode('utf-8') 
-                group_name = self.get_data_from_pattern(self.patterns["group_name_pattern"], page_html)
+                group_name = utils.get_data_from_pattern(self.patterns["group_name_pattern"], page_html)
                 print "we now in group: "  + group_name
     #             self.join_group(page_html)
                 query_appearences = self.driver.find_elements_by_name("query")
@@ -84,30 +83,14 @@ class facebook_phone:
                     print len(post_data["link"])
                     if len(post_data["link"]) > 0:
                         for i in range(len(post_data["link"])):
-                            new_post = posts(user_id = group.user_own_id, group_id = group.id , keyword = group.keyword ,post_text = post_data["results"][i] ,link = post_data["link"][i]  , pub_date =post_data["all_epoch_time"][i] )
-    #                         new_post = posts(user_id = group.user_own_id, group_id = group.id , keyword = group.keyword ,pub_date = 453453, post_text = post_data["results"][i])
-                            new_post.save()
-
-    def fix_groups_links(self,list_of_groups_links):
-        fixed_list_of_groups_links = []
-        for group_link in list_of_groups_links:
-            if not (group_link == "?category=top" or group_link == "?category=friends" or group_link == "?category=local" or not group_link.endswith('/')):
-                fixed_list_of_groups_links.append(group_link)  
-        return fixed_list_of_groups_links
-              
+                            new_post = Posts(user_id = group.user_own_id, group_id = group.id , keyword = group.keyword ,post_text = post_data["results"][i] ,link = post_data["link"][i]  , pub_date =post_data["all_epoch_time"][i] )
+                            new_post.save()        
+        
     def join_group(self,html_page):
         if "Join Group" in html_page:
             self.driver.find_element_by_link_text("Join Group").click()
-            
-    def get_data_from_pattern(self,pattern , text):           
-        name = re.search(pattern, text)
-        if name:
-            found = name.group(1)
-            return found
         
     def get_posts_with_links_and_time(self,html):
-
-        
         post_data = {}
         post_data["link"] = []
         post_data["results"] = []
@@ -116,36 +99,12 @@ class facebook_phone:
         posts_division = html.split("userContentWrapper _5pcr")
         del posts_division[0]
         for post in posts_division:
-            post_data["link"].append(self.get_data_from_pattern(self.patterns["link_pattern"], post))
+            post_data["link"].append(utils.get_data_from_pattern(self.patterns["link_pattern"], post))
             post_data["results"].append(''.join(re.findall(self.patterns["result_pattern"], post)))
-            post_data["all_epoch_time"].append(self.get_data_from_pattern(self.patterns["epoch_time_pattern"], post))
+            post_data["all_epoch_time"].append(utils.get_data_from_pattern(self.patterns["epoch_time_pattern"], post))
 
 
         print post_data["link"]
         print post_data["results"]
         print post_data["all_epoch_time"]            
         return post_data
-        
-#         kin = min(len(post_data["link"]),len(post_data["results"]),len(post_data["all_epoch_time"]))
-#          
-#         fh = open("hello.txt", "w")
-#         fh.write("min is  " + str(kin))
-#         fh.write("\n")
-#         fh.write("link is  " + str(len(post_data["link"])))
-#         fh.write("\n")
-#         fh.write("result is  " + str(len(post_data["results"])))
-#         fh.write("\n")
-#         fh.write("epoch_time is  " + str(len(post_data["all_epoch_time"])))
-#         fh.write("\n")
-#            
-#         for a in range(len(posts_division)):    
-#             fh.write(str(post_data["link"][a]))
-#             fh.write("\n")
-#             fh.write(post_data["results"][a])
-#             fh.write("\n")
-#             fh.write(str(post_data["all_epoch_time"][a]))
-#             fh.write("\n")
-#             fh.write("---------------------------")
-#             fh.write("\n")
-#         print "end loop"
-#         fh.close()

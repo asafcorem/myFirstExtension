@@ -1,4 +1,30 @@
          
+         
+         
+                 
+#         kin = min(len(post_data["link"]),len(post_data["results"]),len(post_data["all_epoch_time"]))
+#          
+#         fh = open("hello.txt", "w")
+#         fh.write("min is  " + str(kin))
+#         fh.write("\n")
+#         fh.write("link is  " + str(len(post_data["link"])))
+#         fh.write("\n")
+#         fh.write("result is  " + str(len(post_data["results"])))
+#         fh.write("\n")
+#         fh.write("epoch_time is  " + str(len(post_data["all_epoch_time"])))
+#         fh.write("\n")
+#            
+#         for a in range(len(posts_division)):    
+#             fh.write(str(post_data["link"][a]))
+#             fh.write("\n")
+#             fh.write(post_data["results"][a])
+#             fh.write("\n")
+#             fh.write(str(post_data["all_epoch_time"][a]))
+#             fh.write("\n")
+#             fh.write("---------------------------")
+#             fh.write("\n")
+#         print "end loop"
+#         fh.close()
 
 # >>> Question.objects.all()
 # [<Question: What's up?>]
@@ -131,6 +157,24 @@
 #                 driver.find_element_by_id("removeRecommendationButton").click()
 #                 continue
 # 
+
+#paaaa
+# katz.135@osu.edu
+# tirosh1!
+# 
+# hillali86@gmail.com
+# RAKEVETMERKAZ86
+# 
+# nooshi10@walla.com
+# naaman1984
+
+# python manage.py makemigrations polls
+# 
+# python manage.py migrate
+# 
+# cd C:\Users\acorem\extension\myFirstExtension\
+
+
 #            
 #             driver.find_element_by_id("chEscrow").click()
 #             driver.find_element_by_id("bidComment").click()
@@ -142,18 +186,18 @@
 #             driver.find_element_by_id("bid1").send_keys("200")
 #                                                                                                                    
 #             theOffer = f.read().decode("utf-8")
-#             driver.find_element_by_id("bidComment").send_keys(u"הי " + result + " :)")
+#             driver.find_element_by_id("bidComment").send_keys(u"×”×™ " + result + " :)")
 #             print 9364894
 #             driver.find_element_by_id("bidComment").send_keys(theOffer)
 #             print 12243245
 #             driver.find_element_by_id("anonymous").click()
-#             driver.find_element_by_link_text(u"פרטים נוספים »").click()
+#             driver.find_element_by_link_text(u"×¤×¨×˜×™×� × ×•×¡×¤×™×� Â»").click()
 #             driver.find_element_by_name("file1").send_keys(about)
 #             driver.find_element_by_name("submitButton").click()
 #             driver.find_elements_by_name("_finish")[1].click()
 #             # ERROR: Caught exception [Error: Dom locators are not implemented yet!]
 #             driver.find_element_by_css_selector("a.mainNav.mainNavWidthOne > img").click()
-#             driver.find_element_by_link_text(u"העבר לארכיון").click()
+#             driver.find_element_by_link_text(u"×”×¢×‘×¨ ×œ×�×¨×›×™×•×Ÿ").click()
 #         
 #     def is_element_present(self, how, what):
 #         try: self.driver.find_element(by=how, value=what)

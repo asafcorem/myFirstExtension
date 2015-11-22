@@ -9,12 +9,33 @@ enter email:
 enter password:  
 <input id="password" type="password" name="password" value="asaf0587">
 <br><br>
-<input type="submit" value="Vote" />
+<input type="submit" value="add new user" />
 </form>
-
+<br><br>
 
 <a target="_blank" 
+	id="scan_posts"
     class="btn btn-info pull-right" 
     href="{% url 'polls:start_scan' question.id %}">
-    Check It Out
+    scan for post
 </a>
+<br><br>
+<a target="_blank" 
+	id="deleteAll"
+    class="btn btn-info pull-right" 
+    href="{% url 'polls:clean_data_bases' question.id %}">
+</a>
+
+
+<br><br>
+<input name="myBtn" type="button" onClick="deleteImage('images/pic.jpg')" value="Delete all data base">
+
+
+
+<script type="text/javascript">
+function deleteImage(x){
+    var conf = confirm("Are you sure you want to delete this image?");
+    if(conf == true){
+		document.getElementById("deleteAll").click();    }
+}
+</script>

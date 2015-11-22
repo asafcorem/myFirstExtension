@@ -8,7 +8,9 @@ from myFirstExtension import phone_from_facebook
 import threading
 from lib2to3.fixer_util import is_import
 import time
-from polls.models import posts
+from polls.models import Posts,Scans
+from datetime import date
+import calendar
 
 
 class IndexView(generic.ListView):
@@ -30,8 +32,6 @@ class ResultsView(generic.DetailView):
     template_name = 'polls/results.html'
  
 def vote(request, question_id):
-#     Users.objects.all().delete()
-#     Groups.objects.all().delete()
     p = get_object_or_404(Question, pk=question_id)
     try:
         email =  request.POST['email']
@@ -84,9 +84,13 @@ def scan_thread():
         time.sleep(600000)
 
 def start_scan(request, question_id):
-    posts.objects.all().delete()
+    epoch_time = int(time.time())
+    new_scan = scan_thread(time_of_the_scan = epoch_time)
+    new_scan.save()
+    Posts.objects.all().delete()
     t = threading.Thread(target=scan_thread)
     t.start()
+    
 
     return HttpResponse("Here's the text of the Web page.") 
 
@@ -94,4 +98,10 @@ def look_for_new_posts(user_details):
     relevant_groups = Groups.objects.filter(user_own_id = user_details.id , is_important = "1")
     FB_phone =  phone_from_facebook.facebook_phone(user_details.user_mail , user_details.user_password)
     FB_phone.get_the_relevant_posts(relevant_groups)
-
+    
+def clean_data_bases(request, question_id):
+    print "1111111"
+    Users.objects.all().delete()
+    Groups.objects.all().delete()
+    Posts.objects.all().delete()
+    return HttpResponse("we cleaned all") 
