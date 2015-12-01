@@ -1,0 +1,21 @@
+{% if  user  %}
+	{{user.id}}
+    <ul>
+    {% for group in  user.Groups_user_own.all %}
+    	<br>
+    	----------------------
+    	<br>
+    	{% for post in group.posts_set.all  %}
+    		<br>
+        	<li><a href="https://www.facebook.com/groups/{{ group.group_link }}permalink/{{post.link}}/">{{ post.post_text }}</a></li>
+        	<br>
+        {% endfor %}
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+<br>
+{{ user.username }}
+
+
