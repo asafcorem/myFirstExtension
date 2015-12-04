@@ -113,20 +113,14 @@ def saving(request, user_id):
 
 def scan_thread():
     while(True):
+        print "start check"
         all_users =  User.objects.all()
         print all_users
         print len(all_users)
-        threads = []
-        i = 0
-        for user_details in all_users:
-            if i==0:
-                t = threading.Thread(target=look_for_new_posts(user_details))
-                threads.append(t)
-                t.start()
-            i = i + 1
-        
+        for user in all_users:
+                look_for_new_posts(user.id)
         print 'Worker'
-        time.sleep(600000)
+        time.sleep(20)
 
 def start_scan(request, question_id):
     epoch_time = int(time.time())

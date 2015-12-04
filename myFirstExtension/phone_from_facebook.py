@@ -35,11 +35,13 @@ class facebook_phone:
     def get_all_group_of_user(self):
         self.start_surfing()
         self.list_of_all_groups = self.collect_groups()
+        self.driver.close()
         return self.list_of_all_groups
 
     def get_the_relevant_posts(self ,list_of_groups ):
         self.start_surfing()
         relevant_post = self.collect_data(list_of_groups)
+        self.driver.close()
 
     def collect_groups(self):
         groups_data = []
