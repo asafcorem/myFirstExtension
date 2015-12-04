@@ -1,21 +1,25 @@
+{{ last_scan.time_of_the_scan }}
+
 {% if  user  %}
-	{{user.id}}
     <ul>
     {% for group in  user.Groups_user_own.all %}
-    	<br>
-    	----------------------
-    	<br>
-    	{% for post in group.posts_set.all  %}
-    		<br>
-        	<li><a href="https://www.facebook.com/groups/{{ group.group_link }}permalink/{{post.link}}/">{{ post.post_text }}</a></li>
-        	<br>
-        {% endfor %}
+			{% if group.is_important == 1 %}
+			<h1>{{ group.group_name }}</h1>
+			------------------------------------
+	    	{% for post in group.posts_set.all|dictsort:"pub_date" %}
+	    		<br>
+	    		{% if  last_scan.time_of_the_scan < post.pub_date  %}
+	        	<h1><li><a href="https://www.facebook.com/groups/{{ group.group_link }}permalink/{{post.link}}/">{{ post.post_text }}</a></li></h1>
+	        	<br>
+	    		{% else %}
+	    		<br>
+	    		<li><a href="https://www.facebook.com/groups/{{ group.group_link }}permalink/{{post.link}}/">{{ post.post_text }}</a></li>
+	    		{% endif %}
+			{% endfor %}
+                {% endif %}
     {% endfor %}
     </ul>
 {% else %}
     <p>No polls are available.</p>
 {% endif %}
 <br>
-{{ user.username }}
-
-
