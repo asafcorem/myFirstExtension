@@ -29,14 +29,14 @@ class IndexView(generic.DetailView):
         if user_by_the_url == user_by_session:
             return user_by_the_url
         else:
-            return get_object_or_404(User, pk="1111")
+            return get_object_or_404(User, pk="1111") 
         
         
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(IndexView, self).get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['book_list'] = "blblblblbl"
+        if self.request.user.is_authenticated():
+            context['last_scan'] = Scans.objects.order_by('-id')[0]
         return context        
         
     
@@ -69,17 +69,19 @@ class ResultsView(generic.DetailView):
  
 def vote(request,asdsad):
     user_email =  request.POST['email']
-    user_password =  request.POST['password'].encode('utf-8')
+    user_password =  request.POST['password']
     
     user = authenticate(username=user_email, password=user_password)
     if user is not None:
         login(request, user)
         return HttpResponseRedirect(reverse('polls:posts_display', args=(user.id,)))  
     else:
-        new_user_register(user_email , user_password)
-        new_user = authenticate(username=user_email, password=user_password)
-        login(request, new_user)
-        return HttpResponseRedirect(reverse('polls:results', args=(new_user.id,)))
+        if new_user_register(user_email , user_password):
+            new_user = authenticate(username=user_email, password=user_password)
+            login(request, new_user)
+            return HttpResponseRedirect(reverse('polls:results', args=(new_user.id,)))
+        else:
+            return HttpResponse("there is no group to show - maybe the password or name was not correct , and maybe you dont have any groups") 
 
      
 def saving(request, user_id):
@@ -145,16 +147,17 @@ def clean_one_user_data(request):
 def new_user_register(user_email , user_password):
         FB_phone =  phone_from_facebook.facebook_phone(user_email , user_password)
         list_of_all_groups = FB_phone.get_all_group_of_user()
-        user = User.objects.create_user(password = user_password , username = user_email ,first_name = user_password)
-        if len(list_of_all_groups)>0:           
+        if len(list_of_all_groups)>0:
+            user = User.objects.create_user(password = user_password , username = user_email ,first_name = user_password)           
             user.save()
             print "check groups link"
             for group in list_of_all_groups: 
                 print group["link"]
                 new_group = Groups(group_name = group["name"] ,group_link = group["link"], user_own = user)
                 new_group.save()  
-        return user             
-
+            return user             
+        else:
+            return False
     
 def log_out(request,blaasd):
     user = request.user

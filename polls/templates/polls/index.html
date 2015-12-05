@@ -4,16 +4,16 @@
     <ul>
     {% for group in  user.Groups_user_own.all %}
 			{% if group.is_important == 1 %}
-			<h1>{{ group.group_name }}</h1>
-			------------------------------------
+			<h1><p style="text-align:right">{{ group.group_name }}</p></h1>
+			<p style="text-align:right">------------------------------------</p>
 	    	{% for post in group.posts_set.all|dictsort:"pub_date" %}
 	    		<br>
 	    		{% if  last_scan.time_of_the_scan < post.pub_date  %}
-	        	<h1><li><a href="https://www.facebook.com/groups/{{ group.group_link }}permalink/{{post.link}}/">{{ post.post_text }}</a></li></h1>
+	        	<h1><li><p style="text-align:right"><a href="https://www.facebook.com/groups/{{ group.group_link }}permalink/{{post.link}}/">{{ post.post_text }}</a></li></h1></p>
 	        	<br>
 	    		{% else %}
 	    		<br>
-	    		<li><a href="https://www.facebook.com/groups/{{ group.group_link }}permalink/{{post.link}}/">{{ post.post_text }}</a></li>
+	    		<li><p style="text-align:right"><a href="https://www.facebook.com/groups/{{ group.group_link }}permalink/{{post.link}}/">{{ post.post_text }}</a></li></p>
 	    		{% endif %}
 			{% endfor %}
                 {% endif %}
