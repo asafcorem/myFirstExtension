@@ -19,7 +19,7 @@ class facebook_phone:
         self.user_details = {"email": email , "password": password}        
         self.verificationErrors = []
         self.accept_next_alert = True
-        self.driver = webdriver.Chrome("C:\Python27\selenium\webdriver\chromedriver")
+        self.driver = webdriver.Chrome()
     
     def start_surfing(self):
         self.driver.implicitly_wait(30)
@@ -52,17 +52,16 @@ class facebook_phone:
         fixed_list_of_groups_links = utils.fix_groups_links(list_of_groups_links)
         list_of_groups_names = re.findall(self.patterns["pattern_for_extracting_all_groups_names"], groups_html)
         
+        print " all the names  "
         for i in range(len(list_of_groups_names)):
+            print list_of_groups_names[i]
+            print fixed_list_of_groups_links[i]
             group_data_elemnt = {"name":list_of_groups_names[i], "link":fixed_list_of_groups_links[i] }
             groups_data.append(group_data_elemnt)
             
         return groups_data
 
     def collect_data(self , list_of_groups):
-        
-        for group in list_of_groups:
-            print group.group_link
-
         for group in list_of_groups:
                 self.driver.get(self.patterns["group_pattern_url"] + group.group_link)
                 page_html = self.driver.page_source.encode('utf-8') 
@@ -77,14 +76,11 @@ class facebook_phone:
                     self.driver.find_element_by_xpath('//button[@type="submit" and @title="Search this group"]').click()
                     html = self.driver.page_source.encode('utf-8') 
                     post_data = self.get_posts_with_links_and_time(html)
-#                     print post_data["link"]
-#                     print post_data["results"]
-#                     print post_data["all_epoch_time"]
-#                     print len(post_data["link"])
                     if len(post_data["link"]) > 0:
                         for i in range(len(post_data["link"])):
-                            new_post = Posts(user_who_post_id = group.user_own_id, group_that_was_post_id = group.id , keyword = group.keyword ,post_text = post_data["results"][i] ,link = post_data["link"][i]  , pub_date =post_data["all_epoch_time"][i] )
-                            new_post.save()        
+                            if not post_data["link"][i] == None:
+                                new_post = Posts(user_who_post_id = group.user_own_id, group_that_was_post_id = group.id , keyword = group.keyword ,post_text = post_data["results"][i] ,link = post_data["link"][i]  , pub_date =post_data["all_epoch_time"][i] )
+                                new_post.save()        
         
     def join_group(self,html_page):
         if "Join Group" in html_page:
@@ -102,8 +98,5 @@ class facebook_phone:
             post_data["link"].append(utils.get_data_from_pattern(self.patterns["link_pattern"], post))
             post_data["results"].append(''.join(re.findall(self.patterns["result_pattern"], post)))
             post_data["all_epoch_time"].append(utils.get_data_from_pattern(self.patterns["epoch_time_pattern"], post))
-
-#         print post_data["link"]
-#         print post_data["results"]
-#         print post_data["all_epoch_time"]            
+        
         return post_data
