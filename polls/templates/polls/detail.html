@@ -36,3 +36,19 @@ function deleteImage(x){
 		document.getElementById("deleteAll").click();    }
 }
 </script>
+
+<br><br>
+
+<form action="/polls/1/clean_one_user_data/" method="post">
+{% csrf_token %}
+
+enter username to delete:  
+<input id="username" type="text" name="username" value="asaelcorem@gmail.com">
+<br><br>
+<input type="submit" value="delete user" />
+</form>
+<br><br>
+
+
+
+

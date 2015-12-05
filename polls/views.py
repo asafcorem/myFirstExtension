@@ -59,7 +59,8 @@ class DetailView(generic.DetailView):
         # Call the base implementation first to get a context
         context = super(DetailView, self).get_context_data(**kwargs)
         # Add in a QuerySet of all the books
-        context['last_scan'] = Scans.objects.order_by('-id')[0]
+        if self.request.user.is_authenticated():
+            context['last_scan'] = Scans.objects.order_by('-id')[0]
         return context    
  
 class ResultsView(generic.DetailView):
@@ -131,6 +132,15 @@ def clean_data_bases(request):
     Posts.objects.all().delete()
     return HttpResponse("we cleaned all") 
 
+def clean_one_user_data(request):
+    print "lalala"
+    user_name =  request.POST['username']
+    print user_name
+    user = User.objects.get(username = user_name)
+    Posts.objects.filter(user_who_post_id = user.id).delete()
+    Groups.objects.filter(user_own_id = user.id).delete()
+    user.delete()
+    return HttpResponse("we cleaned one user") 
 
 def new_user_register(user_email , user_password):
         FB_phone =  phone_from_facebook.facebook_phone(user_email , user_password)

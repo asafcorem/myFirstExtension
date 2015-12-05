@@ -17,8 +17,10 @@ class utils:
         
         
 def fix_groups_links(list_of_groups_links):
+    print "before cleaning"
     fixed_list_of_groups_links = []
     for group_link in list_of_groups_links:
+        print group_link
         if not (group_link == "?category=top" or group_link == "?category=friends" or group_link == "?category=local" or not group_link.endswith('/') or 
                 group_link.endswith('pending/') or group_link.endswith('requests/')):
             fixed_list_of_groups_links.append(group_link)  
