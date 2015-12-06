@@ -22,14 +22,16 @@ from .models import Choice, Question , Groups
 
 
 class IndexView(generic.DetailView):
-    template_name = 'polls/index.html'
     def get_object(self):
-        user_by_the_url = get_object_or_404(User, pk=self.kwargs['pk'])
-        user_by_session =  self.request.user
-        if user_by_the_url == user_by_session:
-            return user_by_the_url
-        else:
-            return get_object_or_404(User, pk="1111") 
+        print 168
+        try:
+            user_by_the_url = User.objects.get(pk=self.kwargs['pk'])
+        except User.DoesNotExist: 
+            print 190  
+            return None
+        print 8798
+        return user_by_the_url
+        
         
         
     def get_context_data(self, **kwargs):
@@ -38,6 +40,19 @@ class IndexView(generic.DetailView):
         if self.request.user.is_authenticated():
             context['last_scan'] = Scans.objects.order_by('-id')[0]
         return context        
+    
+    
+    def get_template_names(self):
+        print 123
+        try:
+            user_by_the_url = User.objects.get(pk=self.kwargs['pk'])
+        except User.DoesNotExist:  
+            return 'polls/detail.html'
+        user_by_session =  self.request.user
+        if user_by_the_url == user_by_session:
+            return 'polls/index.html'
+        else:    
+            return 'polls/detail.html'
         
     
 class DetailView(generic.DetailView):
