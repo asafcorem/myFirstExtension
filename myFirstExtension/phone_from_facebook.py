@@ -4,6 +4,15 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoAlertPresentException
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.alert import Alert
+from selenium.webdriver.chrome.options import Options
+
+
 from polls.models import Choice, Question , Groups ,Posts
 from myFirstExtension import utils
 import unittest, time, re
@@ -19,7 +28,15 @@ class facebook_phone:
         self.user_details = {"email": email , "password": password}        
         self.verificationErrors = []
         self.accept_next_alert = True
-        self.driver = webdriver.Chrome()
+        
+        
+        chromeOptions = webdriver.ChromeOptions()
+        prefs = {"profile.managed_default_content_settings.notifications":2}
+        chromeOptions.add_experimental_option("prefs",prefs)
+        self.driver = webdriver.Chrome(chrome_options=chromeOptions)
+          
+    
+#         self.driver = webdriver.Chrome()
     
     def start_surfing(self):
         self.driver.implicitly_wait(30)
